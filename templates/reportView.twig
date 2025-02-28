@@ -1,0 +1,61 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+
+    <!-- Sekcja Raport -->
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Raport ID: {{ report.id }}</h3>
+            <p><strong>Tytuł:</strong> {{ report.title }}</p>
+            <p><strong>Opis:</strong> {{ report.content }}</p>
+            <p><strong>Data utworzenia:</strong> {{ report.created_at }}</p>
+        </div>
+    </div>
+
+    <!-- Sekcja Dla kogo (Klient) -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4>Informacje o kliencie:</h4>
+            <p><strong>Imię i nazwisko:</strong> {{ client.first_name }} {{ client.last_name }}</p>
+            <p><strong>Email:</strong> {{ client.contact }}</p>
+            <p><strong>Phone:</strong> {{ client.phone }}</p>
+        </div>
+    </div>
+
+    <!-- Sekcja Zadanie -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4>Informacje o zadaniu:</h4>
+            <p><strong>Tytuł zadania:</strong> {{ task.title }}</p>
+            <p><strong>Opis zadania:</strong> {{ task.description }}</p>
+            <p><strong>Status:</strong> {{ task.status }}</p>
+            <p><strong>Data realizacji:</strong> {{ task.due_date }}</p>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4>Notatki:</h4>
+            {% for note in notes %}
+            <p><strong>{{note.created_at}}:</strong> {{ note.content }}</p>
+            {%else%}
+            <p>Brak notatek.</p>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <!-- Sekcja Notatki -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4>Dodaj notatkę:</h4>
+            <form action="" method="post">
+                <div class="mb-3">
+                    <textarea class="form-control" name="note" rows="4" placeholder="Dodaj swoją notatkę..."></textarea>
+                </div>
+                <button type="submit" name="add_note_btn" class="btn btn-primary">Dodaj notatkę</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

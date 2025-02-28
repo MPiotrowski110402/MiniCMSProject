@@ -1,0 +1,27 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<!-- Lista wygenerowanych raportów -->
+<h3>Wygenerowane raporty</h3>
+<ul class="list-group">
+    {% for report in reports %}
+        <li class="list-group-item">
+            <strong>{{ report.title }}</strong><br>
+            <small>{{ report.created_at }}</small><br>
+            {{ report.description }}
+            <div class="mt-2">
+                <a href="index.php?page=report_view&report_id={{ report.id }}" class="btn btn-info btn-sm">Podgląd</a>
+                <a href="index.php?page=export_report&report_id={{report.id}}" class="btn btn-success btn-sm">Eksportuj CSV</a>
+            </div>
+        </li>
+    {% else %}
+        <li class="list-group-item">Brak wygenerowanych raportów</li>
+    {% endfor %}
+</ul>
+
+<!-- Generowanie nowego raportu -->
+<a href="index.php?page=report_add" class="btn btn-primary mt-3">Generuj nowy raport</a>
+
+{% endblock %}

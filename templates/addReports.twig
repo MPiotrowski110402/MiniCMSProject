@@ -1,0 +1,28 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<!-- Formularz edycji raportu -->
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">Edytuj raport</h3>
+        <form action="" method="post">
+            <div class="mb-3">
+                <label for="status" class="form-label">Klient</label>
+                <select class="form-control" id="client_id" name="client_id">
+                    {% for client in clientsList  %}
+                    <option value="{{client.id}}">{{client.first_name}} {{client.last_name}}</option>
+                    {% else %}
+                    <p>Brak danych</p>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <button type="submit" name="report_add_btn" class="btn btn-primary">Zapisz zmiany</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

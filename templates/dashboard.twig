@@ -1,0 +1,48 @@
+{# dashboard.twig #}
+{% extends "layout.twig" %}
+
+{% block content %}
+<div class="container text-center">
+    <h2 class="mb-4">Witaj w Mini CRM</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h4>Łączna liczba klientów</h4>
+                <p class="fs-3">{{customerCount}}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h4>Aktywne zadania</h4>
+                <p class="fs-3">{{activeTasks}}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h4>Zakończone zadania</h4>
+                <p class="fs-3">{{completedTasks}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h4>Nowi klienci w tym miesiącu</h4>
+                <p class="fs-3">{{ newClients }}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h4>Wygenerowane raporty</h4>
+                <p class="fs-3">{{reportGen}}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h4>Oczekujące zadania</h4>
+                <p class="fs-3">{{pendingTasks}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

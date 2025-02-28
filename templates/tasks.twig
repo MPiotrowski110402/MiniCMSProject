@@ -1,0 +1,68 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<!-- Sekcje zadań -->
+<div class="row">
+    <div class="col-md-4">
+        <h3>Aktywne zadania</h3>
+        <ul class="list-group">
+            {% for task in active_tasks %}
+                <li class="list-group-item">
+                    <strong>{{ task.title }}</strong><br>
+                    <small>{{ task.due_date }}</small><br>
+                    {{ task.description }}
+                    <div class="mt-2">
+                        <a href="index.php?page=task&id={{ task.id }}" class="btn btn-info btn-sm">Szczegóły</a>
+                        <a href="index.php?page=tasks&id={{ task.id }}&zakoncz=true"" class="btn btn-success btn-sm">Zakończ</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="list-group-item">Brak aktywnych zadań</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-md-4">
+        <h3>Oczekujące zadania</h3>
+        <ul class="list-group">
+            {% for task in pending_tasks %}
+                <li class="list-group-item">
+                    <strong>{{ task.title }}</strong><br>
+                    <small>{{ task.due_date }}</small><br>
+                    {{ task.description }}
+                    <div class="mt-2">
+                        <a href="index.php?page=task&id={{ task.id }}" class="btn btn-info btn-sm">Szczegóły</a>
+                        <a href="index.php?page=tasks&id={{ task.id }}&active=true"" class="btn btn-success btn-sm">Rozpocznij</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="list-group-item">Brak oczekujących zadań</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-md-4">
+        <h3>Zakończone zadania</h3>
+        <ul class="list-group">
+            {% for task in completed_tasks %}
+                <li class="list-group-item">
+                    <strong>{{ task.title }}</strong><br>
+                    <small>{{ task.due_date }}</small><br>
+                    {{ task.description }}
+                    <div class="mt-2">
+                        <a href="index.php?page=tasks&id={{ task.id }}&delete=true" class="btn btn-danger btn-sm"onclick="return confirm('Czy na pewno chcesz usunąć to zadanie?')">Usuń</a>
+                    </div>  
+                </li>
+            {% else %}
+                <li class="list-group-item">Brak zakończonych zadań</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Dodawanie nowego zadania -->
+<a href="index.php?page=task_add" class="btn btn-primary mt-3">Dodaj nowe zadanie</a>
+
+{% endblock %}

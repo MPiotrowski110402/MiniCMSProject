@@ -1,0 +1,39 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<!-- Lista klientów -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Kontakt</th>
+            <th>Telefon</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client in clientsList %}
+            <tr>
+                <td>{{ client.first_name }}</td>
+                <td>{{ client.last_name }}</td>
+                <td>{{ client.contact }}</td>
+                <td>{{ client.phone }}</td>
+                <td>
+                    <a href="index.php?page=client_edit&id={{ client.id }}" class="btn btn-warning">Edytuj</a>
+                    <a href="index.php?page=client_edit&id={{ client.id }}&delete=true"  class="btn btn-danger">Usuń</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="text-center">Brak klientów do wyświetlenia</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Dodawanie nowego klienta -->
+<a href="index.php?page=client_add" class="btn btn-primary mt-3">Dodaj nowego klienta</a>
+{% endblock %}
