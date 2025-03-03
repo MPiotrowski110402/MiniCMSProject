@@ -8,8 +8,11 @@ require_once 'public/db_connection.php';
 function getReport(){
     global $conn;
     $report_id = $_GET['report_id'];
-    $sql = "SELECT * FROM reports WHERE id = $report_id";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM reports WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $report_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $report = [];
     $row = $result->fetch_assoc();
         $report = [
@@ -78,11 +81,14 @@ function getNote(){
 }
 if(isset($_POST['add_note_btn'])){
     global $conn;
-    $report_id = $_GET['report_id'];
-    $user_id = $_SESSION['id'];
-    $content = $_POST['note'];
-    $sql = "INSERT INTO notes (report_id, user_id,content) VALUES ($report_id,$user_id, '$content')";
-    $conn->query($sql);
+    $report_id = isset($_GET['report_id']) ? (int)$_GET['report_id'] :0;
+    $user_id = isset($_SESSION['id']) ? (int)$_SESSION['id'] :0;
+    $content = htmlspecialchars($_POST['note']);
+    $sql = "INSERT INTO notes (report_id, user_id,content) 
+    VALUES (?,?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('iis', $report_id, $user_id, $content);
+    $stmt->execute();
     header("Location: index.php?page=report_view&report_id=$report_id");
     exit();
 }

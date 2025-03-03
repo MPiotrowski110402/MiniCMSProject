@@ -4,10 +4,12 @@ require_once 'public/session.php';
 require_once 'public/db_connection.php';
 function reportsList(){
     global $conn;
-    $my_id = 1;
-    //$my_id = $_SESSION['user_id'];
-    $sql = "SELECT * FROM reports WHERE user_id = " .$my_id."";
-    $result = $conn->query($sql);
+    $my_id = isset($_SESSION['id']) ? (int)$_SESSION['id'] :0;
+    $sql = "SELECT * FROM reports WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $my_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $reports = [];
     while($row = $result->fetch_assoc()) {
         $reports[] = [

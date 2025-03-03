@@ -6,23 +6,29 @@ require_once 'public/db_connection.php';
 
 
 if(isset($_GET['delete']) && $_GET['delete'] == 'true' ){
-    $id = $_GET['id'];
-    $sql = "UPDATE tasks SET deleted = 1 WHERE id = $id";
-    $conn->query($sql);
+    $id = isset($_GET['id']) ? (int)$_GET['id'] :0;
+    $sql = "UPDATE tasks SET deleted = 1 WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
     header('Location: index.php?page=tasks');
     exit();
 }
 if(isset($_GET['zakoncz']) && $_GET['zakoncz'] == 'true' ){
-    $id = $_GET['id'];
-    $sql = "UPDATE tasks SET status = 'completed' WHERE id = $id";
-    $conn->query($sql);
+    $id = isset($_GET['id']) ? (int)$_GET['id'] :0;
+    $sql = "UPDATE tasks SET status = 'completed' WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
     header('Location: index.php?page=tasks');
     exit();
 }
 if(isset($_GET['active']) && $_GET['active'] == 'true' ){
-    $id = $_GET['id'];
-    $sql = "UPDATE tasks SET status = 'in_progress' WHERE id = $id";
-    $conn->query($sql);
+    $id = isset($_GET['id']) ? (int)$_GET['id'] :0;
+    $sql = "UPDATE tasks SET status = 'in_progress' WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
     header('Location: index.php?page=tasks');
     exit();
 }

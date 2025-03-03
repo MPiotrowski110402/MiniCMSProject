@@ -4,11 +4,14 @@ require_once '../public/session.php';
 require_once '../public/db_connection.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        $username = htmlspecialchars($_POST['username']);
+        $password = ($_POST['password']);// hasło do zabezpieczenia
         if(!empty($username) && !empty($password)){
-            $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-            $result = $conn->query($sql);
+            $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $username, $password);
+            $stmt->execute();
+            $result = $stmt->get_result();
             if($result->num_rows > 0) {
                 $row = mysqli_fetch_assoc($result);
                 $_SESSION['zalogowany'] = true;

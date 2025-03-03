@@ -27,26 +27,5 @@ echo $twig->render('clients.twig', ['clientsList' => $clients]);
 
 
 
-$action = $_GET['action'] ?? 'list'; // Pobieramy akcję (domyślnie lista klientów)
-$id = $_GET['id'] ?? null; // Pobieramy ID klienta (jeśli istnieje)
-
-switch ($action) {
-    case 'view':
-        require __DIR__ . '/client_edit.php';
-        break;
-
-    case 'delete':
-        require __DIR__ . '/client_delete.php';
-        break;
-
-    case 'update':
-        require __DIR__ . '/client_update.php';
-        break;
-
-    default:
-}
-
-
-
 
 ?>

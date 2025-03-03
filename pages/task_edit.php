@@ -18,13 +18,16 @@ function clientList(){
     return $clients;
 }
 if(isset($_POST['edit_task_btn'])){
-    $id = $_GET['id'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
+    $id = isset($_GET['id']) ? (int)$_GET['id'] :0;
+    $title = htmlspecialchars($_POST['title']);
+    $description = htmlspecialchars($_POST['description']);
     $date = $_POST['date'];
-    $client = $_POST['client'];
-    $sql = "SELECT * FROM tasks WHERE id=$id";
-    $result = $conn->query($sql);
+    $client = (int)$_POST['client'];
+    $sql = "SELECT * FROM tasks WHERE id= ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $task = mysqli_fetch_assoc($result);
     if(empty($title)){
         $title = $task['title'];
@@ -38,8 +41,10 @@ if(isset($_POST['edit_task_btn'])){
     if($client == 'no_value' || empty($client)){
         $client = $task['client_id'];
     }
-    $sql = "UPDATE tasks SET client_id='$client', title='$title', description='$description', due_date='$date' WHERE id=$id";
-    $conn->query($sql);
+    $sql = "UPDATE tasks SET client_id=?, title=?, description=?, due_date=? WHERE id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('isssi', $client, $title, $description, $date, $id);
+    $stmt->execute();
     header("Location: index.php?page=task&id=$id");
     exit();
 }

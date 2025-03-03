@@ -6,14 +6,18 @@ require_once 'public/db_connection.php';
 
 if(isset($_POST['edit_client'])){
     global $conn;
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
-    $email = $_POST['email'];
-    $contact_phone = $_POST['contact_phone'];
-    $sql = "SELECT * FROM clients WHERE id = $user_id";
-    $result = mysqli_query($conn,$sql);
+    $user_id = isset($_GET['id']) ? (int)$_GET['id'] :0;
+    $first_name = htmlspecialchars(trim($_POST['first_name']));
+    $last_name = htmlspecialchars(trim($_POST['last_name']));
+    $email = htmlspecialchars(trim($_POST['email']));
+    $contact_phone = preg_replace('/\D/', '', $_POST['contact_phone']);
+    $sql = "SELECT * FROM clients WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
     if($result->num_rows > 0) {
-        $row = mysqli_fetch_assoc($result);
+        $row = $result->fetch_assoc();
         if(empty($first_name)){
             $first_name = $row['first_name'];
         }
@@ -26,17 +30,23 @@ if(isset($_POST['edit_client'])){
         if(empty($contact_phone)){
             $contact_phone = $row['contact_phone'];
         }
-        $sql = "UPDATE clients SET first_name = '$first_name', last_name = '$last_name', contact_email = '$email', contact_phone = '$contact_phone' WHERE id = $user_id";
-        mysqli_query($conn, $sql);
+        $sql = "UPDATE clients SET first_name = ?, last_name = ?, contact_email = ?, contact_phone = ? 
+        WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('sssii', $first_name, $last_name, $email, $contact_phone, $user_id);
+        $stmt->execute();
+        header('Location: index.php?page=clients');
+        exit();
     }
-    header('Location: index.php?page=clients');
-    exit();
 }
+
 if(isset($_GET['delete']) && $_GET['delete'] == 'true'){
     global $conn;
-    $user_id = $_GET['id'];
-    $sql = "DELETE FROM clients WHERE id = $user_id";
-    mysqli_query($conn, $sql);
+    $user_id = isset($_GET['id']) ? (int)$_GET['id'] :0;
+    $sql = "DELETE FROM clients WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
     header('Location: index.php?page=clients');
     exit();
 }

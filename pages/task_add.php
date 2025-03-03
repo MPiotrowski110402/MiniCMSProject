@@ -4,14 +4,18 @@ require_once 'public/session.php';
 require_once 'public/db_connection.php';
 
 if(isset($_POST['task_add_btn'])){
-    $title = $_POST['title'];
-    $description = $_POST['description'];
+    $title = htmlspecialchars($_POST['title']);
+    $description = htmlspecialchars($_POST['description']);
     $date = $_POST['date'];
-    $client = $_POST['client'];
+    $client = (int)$_POST['client'];
     if(!empty($title) &&!empty($description) &&!empty($date) &&!empty($client)){
-    $sql = "INSERT INTO tasks (title, description,status, due_date, client_id) VALUES ('$title', '$description','pending', '$date', '$client')";
-    $conn->query($sql);
+    $sql = "INSERT INTO tasks (title, description, status, due_date, client_id) 
+    VALUES (?, ?,'pending', ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('sssi', $title, $description, $date, $client);
+    $stmt->execute();
     header('Location: index.php?page=tasks');
+    exit();
     }
 }
 
