@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/public/db_connection.php';
+require_once __DIR__ . '../public/db_connection.php';
 require_once __DIR__ . '/public/session.php';
 if(isset($_SESSION['zalogowany']) && $_SESSION['zalogowany'] == true) {
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
